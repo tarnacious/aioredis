@@ -314,6 +314,7 @@ class RedisConnection:
         while self._pubsub_channels:
             _, ch = self._pubsub_channels.popitem()
             logger.debug("Closing pubsub channel %r", ch)
+            ch.put_nowait(b'{ "type": "closing-channel" }')
             ch.close()
         while self._pubsub_patterns:
             _, ch = self._pubsub_patterns.popitem()
